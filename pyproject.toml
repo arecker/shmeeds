@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "shmeeds"
+version = "0.1.0"
+description = "the official social media assistant of alexrecker.com."
+authors = ["Alex Recker <alex@reckerfamily.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+ipdb = "^0.13.4"
+ipython = "^7.20.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
