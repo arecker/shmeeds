@@ -9,14 +9,14 @@ def new_logger(level=_logging.INFO):
     logger = _logging.getLogger('shmeeds')
     logger.setLevel(level=level)
     handler = _logging.StreamHandler(stream=_sys.stderr)
-    formatter = _logging.Formatter()
+    formatter = _logging.Formatter('SHMEEDS :: %(message)s')
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     return logger
 
 
-def new_parser():
-    parser = _argparse.ArgumentParser()
+def new_parser(name=''):
+    parser = _argparse.ArgumentParser(prog=name)
     parser.add_argument('-v', '--verbose', action='store_true', default=False, help='print debug logs')
     parser.add_argument('-s', '--silent', action='store_true', default=False, help='hide logs')
     return parser
