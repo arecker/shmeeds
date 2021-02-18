@@ -1,9 +1,11 @@
-from shmeeds import new_logger, new_parser
+from shmeeds import logger, new_parser, print_version_and_exit
 
 
 def main():
-    logger = new_logger()
     args = new_parser(name='latest').parse_args()
+    if args.version:
+        print_version_and_exit()
+
     logger.info('args: %s', args)
     logger.debug('this is a debug message')
     logger.info('this is an info message')

@@ -2,9 +2,18 @@
 
 the official social media assistant of alexrecker.com.
 
+## Installing
+
+Install with pip.
+
+```shell
+$ pip install shmeeds
+$ shmeeds --version
+```
+
 ## Commands
 
-`latest` returns the latest blog post.
+`shmeeds latest` returns the latest blog post.
 
 ```shell
 $ shmeeds latest
