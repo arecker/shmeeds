@@ -24,6 +24,7 @@ def make_parser():
     parser = _argparse.ArgumentParser(prog='shmeeds')
 
     # global options
+    parser.add_argument('--url', type=str, help='blog URL', default='https://www.alexrecker.com')
     log_opts = parser.add_mutually_exclusive_group()
     log_opts.add_argument('-v', '--verbose', action='store_true', default=False, help='show debug logs')
     log_opts.add_argument('-s', '--silent', action='store_true', default=False, help='hide all logs')
@@ -54,6 +55,8 @@ def main(args=None):
         _platform.python_version(),
         _sys.executable
     )
+
+    _importlib.import_module(f'shmeeds.{args.command}').main(args)
 
 
 if __name__ == '__main__':
