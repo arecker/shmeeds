@@ -1,21 +1,16 @@
-from shmeeds import logger, new_parser, print_version_and_exit
+"""fetch latest journal entry"""
+import argparse
+
+from shmeeds import logger
 
 
-def main():
-    args = new_parser(name='latest').parse_args()
-    if args.version:
-        print_version_and_exit()
+def make_parser(parser=None):
+    parser = parser or argparse.ArgumentParser('latest')
 
-    logger.info('args: %s', args)
-    logger.debug('this is a debug message')
-    logger.info('this is an info message')
-    logger.error('this is an error message')
-    try:
-        int('fart')
-    except ValueError:
-        logger.exception('fart is not a number!')
-    logger.critical('oh the humanity!!!')
+
+def main(args):
+    logger.debug('calling `latest` with args %s', args)
 
 
 if __name__ == '__main__':
-    main()
+    main(make_parser().parse_args())
