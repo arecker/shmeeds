@@ -4,7 +4,7 @@ import collections
 import json
 import os
 
-import feedparser
+import tweepy
 
 from shmeeds import logger, latest
 
@@ -14,6 +14,12 @@ def make_parser(parser=None):
     for key in ('access-token', 'access-token-secret', 'consumer-api-key', 'consumer-api-secret-key'):
         parser.add_argument(f'--twitter-{key}', type=str, help=f'twitter {key.replace("-", " ")}', required=True)
     return latest.make_parser(parser=parser)
+
+
+def make_client(consumer_key='', consumer_secret='', access_token='', access_token_secret=''):
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(access_token, access_token_secret)
+    return tweepy.API(auth)
 
 
 def tweet(body):

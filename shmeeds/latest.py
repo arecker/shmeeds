@@ -8,6 +8,8 @@ import feedparser
 
 from shmeeds import logger
 
+_cache = None
+
 
 def make_parser(parser=None):
     parser = parser or argparse.ArgumentParser('latest')
@@ -16,15 +18,21 @@ def make_parser(parser=None):
 
 
 def fetch(feed_url):
+    global _cache
+    if _cache:
+        logger.debug('returning cached response %s', feed_url)
+        return _cache
+
     logger.info('fetching RSS feed at %s', feed_url)
     feed = feedparser.parse(feed_url)
     latest = feed.entries[0]
-    return collections.OrderedDict(
+    _cache = collections.OrderedDict(
         bannerURL=latest['media_thumbnail'][0]['url'],
         permalink=latest['link'],
         subtitle=latest['content'][-1]['value'],
         title=latest['title']
     )
+    return _cache
 
 
 def main(args):
