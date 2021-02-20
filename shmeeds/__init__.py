@@ -28,11 +28,8 @@ def make_parser():
     log_opts.add_argument('-v', '--verbose', action='store_true', default=False, help='show debug logs')
     log_opts.add_argument('-s', '--silent', action='store_true', default=False, help='hide all logs')
 
-    parser.add_argument('--url', type=str, help='blog URL', default='https://www.alexrecker.com')
-
-
     # subcommands
-    subcommands = ('latest', )
+    subcommands = ('latest', 'tweet')
     subparsers = parser.add_subparsers(dest='command', required=True)
     for cmd in subcommands:
         logger.debug('creating subparser for %s subcommand', cmd)

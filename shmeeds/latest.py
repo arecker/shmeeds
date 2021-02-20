@@ -11,6 +11,7 @@ from shmeeds import logger
 
 def make_parser(parser=None):
     parser = parser or argparse.ArgumentParser('latest')
+    parser.add_argument('--feed-url', type=str, help='RSS feed URL', default='https://www.alexrecker.com/feed.xml')
     return parser
 
 
@@ -28,8 +29,7 @@ def fetch(feed_url):
 
 def main(args):
     logger.debug('calling `latest` with args %s', args)
-    feed_url = os.path.join(args.url, 'feed.xml')
-    response = fetch(feed_url)
+    response = fetch(args.feed_url)
     print(json.dumps(response, indent=2))
 
 
