@@ -12,7 +12,7 @@ from shmeeds import logger, latest
 def make_parser(parser=None):
     parser = parser or argparse.ArgumentParser('tweet')
     for key in ('access-token', 'access-token-secret', 'consumer-api-key', 'consumer-api-secret-key'):
-        parser.add_argument(f'--{key}', type=str, help=f'twitter {key.replace("-", " ")}', required=True)
+        parser.add_argument(f'--twitter-{key}', type=str, help=f'twitter {key.replace("-", " ")}', required=True)
     return latest.make_parser(parser=parser)
 
 
