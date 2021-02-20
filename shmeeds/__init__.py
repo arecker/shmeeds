@@ -24,10 +24,12 @@ def make_parser():
     parser = _argparse.ArgumentParser(prog='shmeeds')
 
     # global options
-    parser.add_argument('--url', type=str, help='blog URL', default='https://www.alexrecker.com')
     log_opts = parser.add_mutually_exclusive_group()
     log_opts.add_argument('-v', '--verbose', action='store_true', default=False, help='show debug logs')
     log_opts.add_argument('-s', '--silent', action='store_true', default=False, help='hide all logs')
+
+    parser.add_argument('--url', type=str, help='blog URL', default='https://www.alexrecker.com')
+
 
     # subcommands
     subcommands = ('latest', )
@@ -45,7 +47,7 @@ def main(args=None):
     args = args or make_parser().parse_args()
 
     if args.silent:
-        logger.propagate = False
+        logger.disabled = True
     elif args.verbose:
         logger.setLevel(level=_logging.DEBUG)
 

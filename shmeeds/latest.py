@@ -11,6 +11,7 @@ from shmeeds import logger
 
 def make_parser(parser=None):
     parser = parser or argparse.ArgumentParser('latest')
+    return parser
 
 
 def fetch(feed_url):
