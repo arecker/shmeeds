@@ -50,3 +50,7 @@ def main():
         for team, cfg in config.slacks().items():
             logger.info('posting to %s slack workspace', team)
             slack.post(response, cfg, dry=args.dry)
+    else:
+        logger.info('no slacks configured, skipping...')
+
+    logger.info('done!')
