@@ -3,7 +3,7 @@ import os
 import platform
 import sys
 
-from shmeeds import log, __version__, config, tweet, latest
+from shmeeds import log, __version__, config, tweet, latest, slack
 from shmeeds.log import logger
 
 
@@ -45,3 +45,8 @@ def main():
 
     if config.twitter():
         tweet.tweet(response, creds=config.twitter(), dry=args.dry)
+
+    if config.slacks():
+        for team, cfg in config.slacks().items():
+            logger.info('posting to %s slack workspace', team)
+            slack.post(response, cfg, dry=args.dry)

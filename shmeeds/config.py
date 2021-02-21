@@ -38,4 +38,17 @@ def load(path):
 
 def twitter():
     global data
-    return dict(data.items('twitter'))
+    try:
+        return dict(data.items('twitter', {}))
+    except configparser.NoSectionError:
+        logger.info('no twitter section in config, skipping...')
+
+
+def slacks():
+    global data
+    slack_sections = [s for s in data.sections() if s.startswith('slack:')]
+    aggregate = {}
+    for section in slack_sections:
+        _, key = section.split('slack:')
+        aggregate[key] = dict(data.items(section))
+    return aggregate
