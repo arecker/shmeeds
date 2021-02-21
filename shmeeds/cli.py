@@ -14,7 +14,12 @@ log_opts.add_argument('-s', '--silent', action='store_true', default=False, help
 
 parser.add_argument('-C', '--config', type=str, default=config.default_path, help='path to config file')
 parser.add_argument('--dry', action='store_true', default=False, help='stub out API calls')
+parser.add_argument('--wait', action='store_true', default=False, help='wait until latest matches git remote')
 parser.add_argument('--feed-url', type=str, default='https://www.alexrecker.com/feed.xml', help='RSS feed url')
+
+github_opts = parser.add_argument_group()
+github_opts.add_argument('--github-user', type=str, default='arecker', help='github username')
+github_opts.add_argument('--github-repo', type=str, default='blog', help='github repo name')
 
 
 def main():
@@ -33,7 +38,10 @@ def main():
         logger.error('config file "%s" does not exist!')
         sys.exit(1)
 
-    response = latest.fetch(args.feed_url)
+    if args.wait:
+        response = latest.wait_for_remote(args.feed_url, user=args.github_user, repo=args.github_repo)
+    else:
+        response = latest.fetch(args.feed_url)
 
     if config.twitter():
         tweet.tweet(response, creds=config.twitter(), dry=args.dry)
