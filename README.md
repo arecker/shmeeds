@@ -11,16 +11,8 @@ $ pip install shmeeds
 $ shmeeds --version
 ```
 
-## Commands
+## Running
 
-`shmeeds latest` returns the latest blog post.
-
-```shell
-$ shmeeds latest
-{
-  "bannerURL": "https://www.alexrecker.com/images/banners/2021-02-17.jpg",
-  "permalink": "https://www.alexrecker.com/2021-02-17.html",
-  "subtitle": "reading, inflatable dinosaurs, and predator",
-  "title": "Wednesday, February 17 2021",
-}
-```
+The `shmeeds` command requires a config file.  The default path is
+`$HOME/.shmeeds.conf`, but you can specify your own with the
+`-C/--config` flag.
