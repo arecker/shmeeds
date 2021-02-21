@@ -10,8 +10,7 @@ license = "GPLv3"
 python = "^3.7"
 feedparser = "^6.0.2"
 tweepy = "^3.10.0"
-requests = "2.11.1"
-InstagramAPI = "^1.0.2"
+requests = "^2.25.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
