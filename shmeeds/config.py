@@ -41,7 +41,15 @@ def twitter():
     try:
         return dict(data.items('twitter', {}))
     except configparser.NoSectionError:
-        logger.info('no twitter section in config, skipping...')
+        return {}
+
+
+def instagram():
+    global data
+    try:
+        return dict(data.items('instagram', {}))
+    except configparser.NoSectionError:
+        return {}
 
 
 def slacks():
