@@ -29,7 +29,7 @@ def fetch_latest_from_remote(user, repo):
     data = response.json()
     paths = [r['path'] for r in data['tree']]
     post_paths = list(filter(lambda p: p.startswith('entries/'), paths))
-    post_slugs = [os.path.basename(p).split('.md')[0] for p in post_paths]
+    post_slugs = [os.path.basename(p).split('.html')[0] for p in post_paths]
     latest_date = datetime.datetime.strptime(sorted(post_slugs)[-1], '%Y-%m-%d')
     return latest_date.strftime('%A, %B %-d %Y')
 
