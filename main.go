@@ -8,9 +8,18 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/dghubble/go-twitter/twitter"
+	"github.com/dghubble/oauth1"
 	"github.com/mmcdole/gofeed"
-	// "github.com/dghubble/go-twitter/twitter"
 )
+
+func isTesting() bool {
+	val, exists := os.LookupEnv("TESTING")
+	if !exists {
+		return false
+	}
+	return val == "1" || val == "true"
+}
 
 func readEnvOrBail(key string) string {
 	val, exists := os.LookupEnv(key)
@@ -34,6 +43,11 @@ func postSlack(body string) error {
 	}
 	url := readEnvOrBail("SLACK_WEBHOOK_URL")
 
+	if isTesting() {
+		log.Printf("(skipping HTTP post for testing)")
+		return nil
+	}
+
 	_, err = http.Post(url, "application/json", bytes.NewBuffer(payload))
 	if err != nil {
 		return err
@@ -42,11 +56,19 @@ func postSlack(body string) error {
 	return nil
 }
 
-// func postTweet(body string) {
-// 	config := oauth1.NewConfig("consumerKey", "consumerSecret")
-// 	token := oauth1.NewToken("accessToken", "accessSecret")
-// 	httpClient := config.Client(oauth1.NoContext, token)
-// }
+func postTweet(body string) error {
+	config := oauth1.NewConfig(readEnvOrBail("TWEET_CONSUMER_API_KEY"), readEnvOrBail("TWEET_CONSUMER_API_SECRET_KEY"))
+	token := oauth1.NewToken(readEnvOrBail("TWEET_ACCESS_TOKEN"), readEnvOrBail("TWEET_ACCESS_TOKEN_SECRET"))
+	httpClient := config.Client(oauth1.NoContext, token)
+	client := twitter.NewClient(httpClient)
+
+	if isTesting() {
+		log.Printf("(skipping tweet for testing)")
+		return nil
+	}
+	_, _, err := client.Statuses.Update(body, nil)
+	return err
+}
 
 func main() {
 	feedUrl := readEnvOrBail("FEED_URL")
@@ -73,4 +95,11 @@ func main() {
 		os.Exit(1)
 	}
 	log.Printf("successfully shared \"%s\" to slack", latest.Description)
+
+	err = postTweet(body)
+	if err != nil {
+		log.Fatalf("failed to post entry to twitter: %s", err)
+		os.Exit(1)
+	}
+	log.Printf("successfully shared \"%s\" to twitter", latest.Description)
 }
