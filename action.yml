@@ -1,0 +1,26 @@
+name: 'shmeeds'
+
+inputs:
+  feed-url:
+    required: True
+  slack-webhook-url:
+    required: True
+  tweet-access-token:
+    required: True
+  tweet-access-token-secret:
+    required: True
+  tweet-consumer-api-key:
+    required: True
+  tweet-consumer-api-secret-key:
+    required: True
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  env:
+    FEED_URL: '${{ inputs.feed-url }}'
+    SLACK_WEBHOOK_URL: '${{ inputs.slack-webhook-url }}'
+    TWEET_ACCESS_TOKEN: '${{ inputs.tweet-access-token }}'
+    TWEET_ACCESS_TOKEN_SECRET: '${{ inputs.tweet-access-token-secret }}'
+    TWEET_CONSUMER_API_KEY: '${{ inputs.tweet-consumer-api-key }}'
+    TWEET_CONSUMER_API_SECRET_KEY: '${{ inputs.tweet-consumer-api-secret-key }}'
