@@ -23,7 +23,7 @@ func isTesting() bool {
 
 func readEnvOrBail(key string) string {
 	val, exists := os.LookupEnv(key)
-	if !exists {
+	if !exists || val == "" {
 		log.Fatalf("%s=\"...\" is not set!", key)
 		os.Exit(1)
 	}
