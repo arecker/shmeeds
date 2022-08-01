@@ -33,7 +33,7 @@ func readEnvOrBail(key string) string {
 func postSlack(body string) error {
 	data := map[string]string{
 		"text":       body,
-		"channel":    "@alex",
+		"channel":    "#blog",
 		"username":   "reckerbot",
 		"icon_emoji": ":reckerbot",
 	}
