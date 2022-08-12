@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/dghubble/go-twitter/twitter"
 	"github.com/dghubble/oauth1"
@@ -17,6 +18,14 @@ func isTesting() bool {
 	val, exists := os.LookupEnv("TESTING")
 	if !exists {
 		return false
+	}
+	return val == "1" || val == "true"
+}
+
+func shouldCheckDate() bool {
+	val, exists := os.LookupEnv("CHECK_DATE")
+	if !exists {
+		return true
 	}
 	return val == "1" || val == "true"
 }
@@ -70,22 +79,48 @@ func postTweet(body string) error {
 	return err
 }
 
+func fetchTodaysEntry(url string) (*gofeed.Item, error) {
+	fp := gofeed.NewParser()
+
+	var latest *gofeed.Item
+	var err error
+
+	for {
+		feed, err := fp.ParseURL(url)
+		if err != nil {
+			return latest, err
+		}
+
+		latest = feed.Items[0]
+
+		if !shouldCheckDate() {
+			log.Printf("skipping date comparison, since CHECK_DATE=\"...\" disabled")
+			break
+		}
+
+		// check date
+		todaysDate := time.Now().Format("01-02-2006")
+		thisDate := latest.PublishedParsed.Format("01-02-2006")
+
+		if todaysDate == thisDate {
+			break
+		}
+
+		log.Printf("entry date %s does not match today's date %s, waiting...", thisDate, todaysDate)
+		time.Sleep(5 * time.Second)
+	}
+
+	return latest, err
+}
+
 func main() {
 	feedUrl := readEnvOrBail("FEED_URL")
 
-	fp := gofeed.NewParser()
-	feed, err := fp.ParseURL(feedUrl)
+	latest, err := fetchTodaysEntry(feedUrl)
 	if err != nil {
 		log.Fatalf("error fetching %s: %s", feedUrl, err)
 		os.Exit(1)
 	}
-
-	if len(feed.Items) < 1 {
-		log.Fatalf("feed has no items!")
-		os.Exit(1)
-	}
-
-	latest := feed.Items[0]
 	log.Printf("successfully downloaded latest entry \"%s\"", latest.Description)
 
 	body := fmt.Sprintf("%s\n%s\n%s", latest.Title, latest.Description, latest.Link)

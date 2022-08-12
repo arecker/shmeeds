@@ -7,6 +7,7 @@ TWEET_SECRETS := TWEET_ACCESS_TOKEN="$$(pass twitter/reckerbot/access-token)" \
 .PHONY: run
 run: shmeeds
 	TESTING="1" \
+	CHECK_DATE="1" \
 	$(SLACK_SECRETS) $(TWEET_SECRETS) \
 	FEED_URL="https://www.alexrecker.com/feed.xml" \
 	./shmeeds
